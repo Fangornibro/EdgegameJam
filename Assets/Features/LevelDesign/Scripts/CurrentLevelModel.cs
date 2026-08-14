@@ -1,5 +1,11 @@
-﻿namespace Features.LevelDesign.Scripts {
+namespace Features.LevelDesign.Scripts {
     public class CurrentLevelModel {
-        public LevelBehaviour LevelBehaviour { get; set; }
+        public LevelBehaviour LevelPrefab { get; set; }
+        public LevelBehaviour LevelInstance { get; set; }
+
+        public void Clear() {
+            LevelPrefab = null;
+            LevelInstance = null;
+        }
     }
 }

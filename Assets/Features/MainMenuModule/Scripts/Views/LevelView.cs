@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
+using Features.GameContextsModule.Scripts;
+using Features.LevelDesign.Scripts;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Features.MainMenuModule.Scripts.Views {
@@ -18,8 +19,10 @@ namespace Features.MainMenuModule.Scripts.Views {
             _levelButton.onClick.RemoveListener(StartLevel);
         }
 
-        private void StartLevel() {
-            SceneManager.LoadScene("TestLevel", LoadSceneMode.Single);
+        private async void StartLevel() {
+            _levelButton.interactable = false;
+            ServiceLocator.Get<CurrentLevelModel>().LevelPrefab = _levelConfiguration.LevelBehaviour;
+            await ServiceLocator.Get<SceneLoader>().SwitchToAsync(SceneNames.Level);
         }
     }
 }

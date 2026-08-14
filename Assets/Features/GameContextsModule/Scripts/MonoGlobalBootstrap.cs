@@ -1,16 +1,24 @@
+using Features.CharacterModule.Scripts;
+using Features.LevelDesign.Scripts;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Features.GameContextsModule.Scripts {
     public class MonoGlobalBootstrap : MonoBehaviour {
-        [SerializeField] private string _firstSceneName = "MainMenuScene";
+        [SerializeField] private string _firstSceneName = SceneNames.MainMenu;
+        [SerializeField] private CharacterEntity _mainCharacter;
 
-        public void Awake() {
-            SceneManager.LoadScene(_firstSceneName, LoadSceneMode.Single);
-        }    
-    }
+        private void Awake() {
+            ServiceLocator.Register(new CurrentLevelModel());
+            ServiceLocator.Register(new SceneLoader(gameObject.scene));
+            ServiceLocator.Register<ICharacterFactory>(new CharacterFactory(_mainCharacter));
+        }
 
-    public class MonoLevelBootstrap : MonoBehaviour {
-        
+        private async void Start() {
+            await ServiceLocator.Get<SceneLoader>().LoadAsync(_firstSceneName);
+        }
+
+        private void OnDestroy() {
+            ServiceLocator.Clear();
+        }
     }
 }
