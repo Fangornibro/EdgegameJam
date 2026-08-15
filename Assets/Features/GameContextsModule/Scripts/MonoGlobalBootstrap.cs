@@ -8,15 +8,18 @@ namespace Features.GameContextsModule.Scripts {
         [SerializeField] private string _firstSceneName = SceneNames.MainMenu;
         [SerializeField] private CharacterEntity _mainCharacter;
         [SerializeField] private LevelsSequenceConfiguration _levelsSequenceConfiguration;
+        [SerializeField] private ScoreEntity _scoreEntityPrefab;
 
         private void Awake() {
-            CurrentLevelModel currentLevelModel = new();
+            LevelsModel levelsModel = new();
             SceneLoader sceneLoader = new(gameObject.scene);
-            ServiceLocator.Register(currentLevelModel);
+            ServiceLocator.Register(levelsModel);
             ServiceLocator.Register(sceneLoader);
             ServiceLocator.Register(_levelsSequenceConfiguration);
             ServiceLocator.Register<ICharacterFactory>(new CharacterFactory(_mainCharacter));
-            ServiceLocator.Register<ILevelSceneService>(new LevelSceneService(sceneLoader, currentLevelModel, _levelsSequenceConfiguration));
+            ServiceLocator.Register<IScoreEntityFactory>(new ScoreEntityFactory(_scoreEntityPrefab, levelsModel));
+            ServiceLocator.Register<ILevelSceneService>(new LevelSceneService(sceneLoader, levelsModel, _levelsSequenceConfiguration));
+            levelsModel.SetupLevelCompletionDatas(_levelsSequenceConfiguration);
         }
 
         private async void Start() {

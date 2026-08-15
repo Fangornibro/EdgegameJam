@@ -228,7 +228,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Features.ManMenuModule.Scripts.SelectLevelView
   _backButton: {fileID: 5201588097831317}
-  _levelsSequenceConfiguration: {fileID: 11400000, guid: 9a3f110c61baafd4aa77b439e77b03b9, type: 2}
   _levelsContainer: {fileID: 6682500619714135551}
   _levelViewPrefab: {fileID: 5984979068613357946, guid: 56e798ae17522ae41a0d174628b7984f, type: 3}
 --- !u!1 &6887272970621119367

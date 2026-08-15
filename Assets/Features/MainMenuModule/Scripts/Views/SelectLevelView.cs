@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Features.GameContextsModule.Scripts;
+using Features.LevelDesign.Scripts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,9 +12,16 @@ namespace Features.MainMenuModule.Scripts.Views {
         private readonly List<LevelView> _levelViews = new();
 
         private void Start() {
-            foreach (LevelConfiguration levelConfiguration in ServiceLocator.Get<LevelsSequenceConfiguration>().LevelsSequence) {
+            List<LevelConfiguration> list = ServiceLocator.Get<LevelsSequenceConfiguration>().LevelsSequence;
+            for (int index = 0; index < list.Count; index++) {
+                LevelConfiguration levelConfiguration = list[index];
+                LevelConfiguration backLevelConfiguration = null;
+                if(index != 0) 
+                    backLevelConfiguration = list[index - 1];
                 LevelView levelView = Instantiate(_levelViewPrefab, _levelsContainer);
-                levelView.Initialize(levelConfiguration);
+                Dictionary<LevelBehaviour, LevelCompletionData> levelCompletionDatas = ServiceLocator.Get<LevelsModel>().LevelCompletionDatas;
+                bool isUnLocked = backLevelConfiguration == null || levelCompletionDatas[backLevelConfiguration.LevelBehaviour].IsCompleted;
+                levelView.Initialize(levelConfiguration, levelCompletionDatas[levelConfiguration.LevelBehaviour].Score, isUnLocked);
                 _levelViews.Add(levelView);
             }
         }

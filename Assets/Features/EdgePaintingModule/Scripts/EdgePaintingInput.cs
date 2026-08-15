@@ -54,7 +54,7 @@ namespace Features.EdgePaintingModule.Scripts {
         }
 
         private void BeginEdge(Vector2 position) {
-            if(_edgesCount >= ServiceLocator.Get<CurrentLevelModel>().LevelInstance.MaxEdgeCount)
+            if(_edgesCount >= ServiceLocator.Get<LevelsModel>().CurrentLevelInstance.MaxEdgeCount)
                 return;
 
             _pressPosition = position;

@@ -11,18 +11,18 @@ namespace Features.GameContextsModule.Scripts {
             ServiceLocator.Register(edgesModel);
             ServiceLocator.Register<IEdgesService>(new EdgesService(edgesModel));
 
-            CurrentLevelModel currentLevelModel = ServiceLocator.Get<CurrentLevelModel>();
+            LevelsModel levelsModel = ServiceLocator.Get<LevelsModel>();
 
-            if (currentLevelModel.LevelPrefab == null) {
-                Debug.LogError($"{nameof(CurrentLevelModel)}.{nameof(CurrentLevelModel.LevelPrefab)} is not set, nothing to spawn.", this);
+            if (levelsModel.CurrentLevelPrefab == null) {
+                Debug.LogError($"{nameof(LevelsModel)}.{nameof(LevelsModel.CurrentLevelPrefab)} is not set, nothing to spawn.", this);
                 return;
             }
 
-            currentLevelModel.LevelInstance = Instantiate(currentLevelModel.LevelPrefab, _levelContainer);
+            levelsModel.CurrentLevelInstance = Instantiate(levelsModel.CurrentLevelPrefab, _levelContainer);
         }
 
         private void OnDestroy() {
-            if (ServiceLocator.TryGet(out CurrentLevelModel currentLevelModel))
+            if (ServiceLocator.TryGet(out LevelsModel currentLevelModel))
                 currentLevelModel.ClearLevelInstance();
 
             ServiceLocator.Unregister<IEdgesService>();

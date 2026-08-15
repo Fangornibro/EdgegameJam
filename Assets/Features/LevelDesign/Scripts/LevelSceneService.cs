@@ -6,43 +6,48 @@ using UnityEngine;
 namespace Features.LevelDesign.Scripts {
     public class LevelSceneService : ILevelSceneService {
         private readonly SceneLoader _sceneLoader;
-        private readonly CurrentLevelModel _currentLevelModel;
+        private readonly LevelsModel _levelsModel;
         private readonly LevelsSequenceConfiguration _levelsSequenceConfiguration;
 
-        public LevelSceneService(SceneLoader sceneLoader, CurrentLevelModel currentLevelModel, LevelsSequenceConfiguration levelsSequenceConfiguration) {
+        public LevelSceneService(SceneLoader sceneLoader, LevelsModel levelsModel, LevelsSequenceConfiguration levelsSequenceConfiguration) {
             _sceneLoader = sceneLoader;
-            _currentLevelModel = currentLevelModel;
+            _levelsModel = levelsModel;
             _levelsSequenceConfiguration = levelsSequenceConfiguration;
         }
         
-        public async Task RestartCurrentLevel() {
-            if (_currentLevelModel.IsSwitchingScene)
+        public async Task RestartCurrentLevel(bool withScoreCleanup = true) {
+            if (_levelsModel.IsSwitchingScene)
                 return;
 
-            _currentLevelModel.IsSwitchingScene = true;
-            _currentLevelModel.InvokeOnSceneSwitchStarted();
+            if(withScoreCleanup) 
+                _levelsModel.LevelCompletionDatas[_levelsModel.CurrentLevelPrefab].Score = 0;
+            _levelsModel.IsSwitchingScene = true;
+            _levelsModel.InvokeOnSceneSwitchStarted();
             await _sceneLoader.SwitchToAsync(SceneNames.Level);
-            _currentLevelModel.IsSwitchingScene = false;
+            _levelsModel.IsSwitchingScene = false;
         }
 
         public async Task GoToNextLevel() {
-            int index = _levelsSequenceConfiguration.LevelsSequence.IndexOf(_levelsSequenceConfiguration.LevelsSequence.Find(l => l.LevelBehaviour == _currentLevelModel.LevelPrefab));
+            int index = _levelsSequenceConfiguration.LevelsSequence.IndexOf(_levelsSequenceConfiguration.LevelsSequence.Find(l => l.LevelBehaviour == _levelsModel.CurrentLevelPrefab));
+            _levelsModel.LevelCompletionDatas[_levelsModel.CurrentLevelPrefab].IsCompleted = true;
             if (_levelsSequenceConfiguration.LevelsSequence.Count > index + 1) {
-                _currentLevelModel.LevelPrefab = _levelsSequenceConfiguration.LevelsSequence[index + 1].LevelBehaviour;
-                await RestartCurrentLevel();
+                _levelsModel.CurrentLevelPrefab = _levelsSequenceConfiguration.LevelsSequence[index + 1].LevelBehaviour;
+                await RestartCurrentLevel(false);
             }
             else
-                await GoToMainMenu();
+                await GoToMainMenu(false);
         }
 
-        public async Task GoToMainMenu() {
-            if (_currentLevelModel.IsSwitchingScene)
+        public async Task GoToMainMenu(bool withScoreCleanup = true) {
+            if (_levelsModel.IsSwitchingScene)
                 return;
 
-            _currentLevelModel.IsSwitchingScene = true;
-            _currentLevelModel.InvokeOnSceneSwitchStarted();
+            if(withScoreCleanup) 
+                _levelsModel.LevelCompletionDatas[_levelsModel.CurrentLevelPrefab].Score = 0;
+            _levelsModel.IsSwitchingScene = true;
+            _levelsModel.InvokeOnSceneSwitchStarted();
             await _sceneLoader.SwitchToAsync(SceneNames.MainMenu);
-            _currentLevelModel.IsSwitchingScene = false;
+            _levelsModel.IsSwitchingScene = false;
         }
     }
 }

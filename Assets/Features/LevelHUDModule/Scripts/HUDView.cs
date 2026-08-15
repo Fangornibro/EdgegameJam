@@ -9,22 +9,22 @@ namespace Features.LevelHUDModule.Scripts {
         [SerializeField] private Button _goToMainMenuButton;
 
         private ILevelSceneService _levelSceneService;
-        private CurrentLevelModel _currentLevelModel;
+        private LevelsModel _levelsModel;
         
         private void OnEnable() {
             _levelSceneService ??= ServiceLocator.Get<ILevelSceneService>();
-            _currentLevelModel ??= ServiceLocator.Get<CurrentLevelModel>();
+            _levelsModel ??= ServiceLocator.Get<LevelsModel>();
             
             _restartButton.onClick.AddListener(Restart);
             _goToMainMenuButton.onClick.AddListener(GoToMainMenu);
-            _currentLevelModel.OnSceneSwitchStarted += SetButtonsNotInteractable;
+            _levelsModel.OnSceneSwitchStarted += SetButtonsNotInteractable;
 
         }
 
         private void OnDisable() {
             _restartButton.onClick.RemoveListener(Restart);
             _goToMainMenuButton.onClick.RemoveListener(GoToMainMenu);
-            _currentLevelModel.OnSceneSwitchStarted -= SetButtonsNotInteractable;
+            _levelsModel.OnSceneSwitchStarted -= SetButtonsNotInteractable;
         }
 
         private async void Restart() =>
