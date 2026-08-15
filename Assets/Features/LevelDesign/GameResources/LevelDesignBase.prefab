@@ -307,7 +307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624317d4b28d4d239f95b1a7206f181c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Features.LevelDesign.Scripts.LevelBehaviour
-  <MaxEdgeCount>k__BackingField: 2
+  <MaxEdgeCount>k__BackingField: 1
 --- !u!114 &5678041385355887074
 MonoBehaviour:
   m_ObjectHideFlags: 0
