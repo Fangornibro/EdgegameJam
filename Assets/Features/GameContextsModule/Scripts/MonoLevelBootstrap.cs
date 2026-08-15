@@ -6,10 +6,14 @@ namespace Features.GameContextsModule.Scripts {
     public class MonoLevelBootstrap : MonoBehaviour {
         [SerializeField] private Transform _levelContainer;
 
+        [Tooltip("How much of the screen the overlap must cover before the zones collapse to it.")]
+        [SerializeField, Range(0f, 0.5f)] private float _minVisibleAreaFraction = 0.01f;
+
         private void Awake() {
             EdgesModel edgesModel = new();
             ServiceLocator.Register(edgesModel);
-            ServiceLocator.Register<IEdgesService>(new EdgesService(edgesModel));
+            ServiceLocator.Register<IEdgesService>(
+                new EdgesService(edgesModel, Camera.main, minVisibleAreaFraction: _minVisibleAreaFraction));
 
             LevelsModel levelsModel = ServiceLocator.Get<LevelsModel>();
 

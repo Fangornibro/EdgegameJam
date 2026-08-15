@@ -23,6 +23,8 @@ namespace Features.EdgePaintingModule.Scripts {
         private Transform _currentEndPoint;
         private Vector2 _pressPosition;
 
+        public EdgeData CurrentEdgeData => _currentEdgeData;
+
         private void Awake() {
             if (_camera == null)
                 _camera = Camera.main;
@@ -73,6 +75,7 @@ namespace Features.EdgePaintingModule.Scripts {
 
             _currentEdgeData = new EdgeData(_pressPosition, _pressPosition);
             _currentEdge.Initialize(_currentEdgeData);
+            _edgesModel.PreviewEdge = _currentEdgeData;
 
             _currentEndPoint = SpawnPointEnd(_pressPosition, Vector2.zero);
         }
@@ -83,6 +86,7 @@ namespace Features.EdgePaintingModule.Scripts {
 
             _currentLine.SetPosition(1, position);
             _currentEdgeData.SetPoints(_pressPosition, position);
+            _edgesModel.PreviewEdge = null;
             _edgesModel.Add(_currentEdgeData);
             UpdateEndPoint(position);
 

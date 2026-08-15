@@ -11,6 +11,9 @@ namespace Features.EdgePaintingModule.Scripts {
         public IReadOnlyList<EdgeData> Edges => _edges;
         public int Count => _edges.Count;
 
+        // The edge currently being dragged. It is not committed yet, but zones already react to it.
+        public EdgeData PreviewEdge { get; set; }
+
         public void Add(EdgeData edge) {
             if (edge == null)
                 throw new ArgumentNullException(nameof(edge));

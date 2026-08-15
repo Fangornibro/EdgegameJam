@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Features.EdgePaintingModule.Scripts;
 using Features.GameContextsModule.Scripts;
 using UnityEngine;
@@ -31,6 +30,10 @@ namespace Features.CharacterModule.Scripts {
         [SerializeField] private Transform _groundCheckOrigin;
         [SerializeField] private Vector2 _groundCheckSize = new(0.45f, 0.1f);
         [SerializeField] private LayerMask _groundLayers;
+
+        [Header("Edges")]
+        [Tooltip("On: gravity flips inside the area the shader repaints. Off: it flips outside of it.")]
+        [SerializeField] private bool _invertGravityInSwappedArea = true;
 
         private float _defaultGravityScale;
         private float _horizontalInput;
@@ -85,8 +88,8 @@ namespace Features.CharacterModule.Scripts {
             if (_jumpBufferLeft > 0f)
                 _jumpBufferLeft -= Time.deltaTime;
 
-            List<EdgeSide> sideOfLastEdge = _edgesService.GetSideOfEdges(transform.position);
-            bool isGravityInverted = sideOfLastEdge.Count > 0 && !sideOfLastEdge.Contains(EdgeSide.Left);
+            bool isInSwappedArea = _edgesService.IsInSwappedArea(transform.position);
+            bool isGravityInverted = _invertGravityInSwappedArea ? isInSwappedArea : !isInSwappedArea;
 
             if (_isGravityInverted != isGravityInverted) {
                 _isGravityInverted = isGravityInverted;
