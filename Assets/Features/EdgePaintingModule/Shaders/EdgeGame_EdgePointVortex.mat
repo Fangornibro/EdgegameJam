@@ -39,8 +39,8 @@ Material:
     - _SwirlSpeed: 2
     - _Twist: 4
     m_Colors:
-    - _CoreColor: {r: 0.6, g: 0.9, b: 1, a: 0.5019608}
-    - _GlowColor: {r: 0.19999993, g: 0.39999995, b: 1, a: 0.5019608}
+    - _CoreColor: {r: 0.9882353, g: 0.95686275, b: 0.46666658, a: 1}
+    - _GlowColor: {r: 0.80784315, g: 0.57254905, b: 0.090196066, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

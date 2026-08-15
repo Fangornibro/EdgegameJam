@@ -31,19 +31,24 @@ namespace Features.EdgePaintingModule.Scripts {
         public bool IsIntersectionMode {
             get {
                 Rect viewRect = GetViewRect();
-                int activeCount = GetActiveEdgeCount();
 
-                // While an edge is being dragged its geometry changes every frame, so the
-                // cached answer would be one frame stale.
-                bool isDragging = _edgesModel.PreviewEdge != null;
-
-                if (isDragging || _cachedEdgeCount != activeCount || _cachedViewRect != viewRect) {
-                    _cachedEdgeCount = activeCount;
+                if (_cachedEdgeCount != _edgesModel.Count || _cachedViewRect != viewRect) {
+                    _cachedEdgeCount = _edgesModel.Count;
                     _cachedViewRect = viewRect;
-                    _isIntersectionMode = activeCount > 1 && IsIntersectionVisible(viewRect);
+                    _isIntersectionMode = _edgesModel.Count > 1 && IsIntersectionVisible(viewRect, false);
                 }
 
                 return _isIntersectionMode;
+            }
+        }
+
+        // The dragged edge changes every frame, so this one is never cached.
+        public bool IsPreviewIntersectionMode {
+            get {
+                if (_edgesModel.PreviewEdge == null)
+                    return IsIntersectionMode;
+
+                return GetActiveEdgeCount() > 1 && IsIntersectionVisible(GetViewRect(), true);
             }
         }
 
@@ -59,12 +64,19 @@ namespace Features.EdgePaintingModule.Scripts {
             return signedDistance > 0f ? EdgeSide.Left : EdgeSide.Right;
         }
 
-        public bool IsInSwappedArea(Vector2 position) {
-            if (GetActiveEdgeCount() == 0)
+        // Gameplay only reacts to committed edges: the character must not turn into a soul
+        // while the player is still dragging the line.
+        public bool IsInSwappedArea(Vector2 position) =>
+            IsInSwappedArea(position, false);
+
+        public bool IsInSwappedArea(Vector2 position, bool includePreview) {
+            if (GetEdgeCount(includePreview) == 0)
                 return false;
 
-            if (IsIntersectionMode) {
-                foreach (EdgeData edgeData in GetActiveEdges()) {
+            bool isIntersection = includePreview ? IsPreviewIntersectionMode : IsIntersectionMode;
+
+            if (isIntersection) {
+                foreach (EdgeData edgeData in GetEdges(includePreview)) {
                     if (GetSide(edgeData, position) == EdgeSide.Left)
                         return false;
                 }
@@ -72,7 +84,7 @@ namespace Features.EdgePaintingModule.Scripts {
                 return true;
             }
 
-            foreach (EdgeData edgeData in GetActiveEdges()) {
+            foreach (EdgeData edgeData in GetEdges(includePreview)) {
                 if (GetSide(edgeData, position) == EdgeSide.Right)
                     return true;
             }
@@ -89,16 +101,19 @@ namespace Features.EdgePaintingModule.Scripts {
             return edgeSides;
         }
 
-        private IEnumerable<EdgeData> GetActiveEdges() {
+        private IEnumerable<EdgeData> GetEdges(bool includePreview) {
             foreach (EdgeData edgeData in _edgesModel.Edges)
                 yield return edgeData;
 
-            if (_edgesModel.PreviewEdge != null)
+            if (includePreview && _edgesModel.PreviewEdge != null)
                 yield return _edgesModel.PreviewEdge;
         }
 
+        private int GetEdgeCount(bool includePreview) =>
+            _edgesModel.Count + (includePreview && _edgesModel.PreviewEdge != null ? 1 : 0);
+
         private int GetActiveEdgeCount() =>
-            _edgesModel.Count + (_edgesModel.PreviewEdge == null ? 0 : 1);
+            GetEdgeCount(true);
 
         private Rect GetViewRect() {
             if (_camera == null)
@@ -112,14 +127,14 @@ namespace Features.EdgePaintingModule.Scripts {
 
         // Clips the visible rect by every right half plane (Sutherland-Hodgman).
         // What survives is the part of the overlap the player can actually see.
-        private bool IsIntersectionVisible(Rect viewRect) {
+        private bool IsIntersectionVisible(Rect viewRect, bool includePreview) {
             _clippedPolygon.Clear();
             _clippedPolygon.Add(new Vector2(viewRect.xMin, viewRect.yMin));
             _clippedPolygon.Add(new Vector2(viewRect.xMax, viewRect.yMin));
             _clippedPolygon.Add(new Vector2(viewRect.xMax, viewRect.yMax));
             _clippedPolygon.Add(new Vector2(viewRect.xMin, viewRect.yMax));
 
-            foreach (EdgeData edgeData in GetActiveEdges()) {
+            foreach (EdgeData edgeData in GetEdges(includePreview)) {
                 ClipByEdge(edgeData);
 
                 if (_clippedPolygon.Count < 3)

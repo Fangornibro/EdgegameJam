@@ -26,7 +26,7 @@ namespace Features.EdgePaintingModule.Scripts {
 
             Shader.SetGlobalVectorArray(EdgesId, _edgeBuffer);
             Shader.SetGlobalInt(EdgeCountId, edgeCount);
-            Shader.SetGlobalInt(EdgeCombineModeId, _edgesService.IsIntersectionMode ? 1 : 0);
+            Shader.SetGlobalInt(EdgeCombineModeId, _edgesService.IsPreviewIntersectionMode ? 1 : 0);
         }
 
         private void OnDisable() {
