@@ -15,3 +15,5 @@ MonoBehaviour:
   LevelsSequence:
   - <LevelIcon>k__BackingField: {fileID: -3926240249598003598, guid: 7bd10777a6b5bb04885497de84e9a72c, type: 3}
     <LevelBehaviour>k__BackingField: {fileID: 7237613149555135198, guid: 490f946793d77ea44b571a5414e950cb, type: 3}
+  - <LevelIcon>k__BackingField: {fileID: -3926240249598003598, guid: 7bd10777a6b5bb04885497de84e9a72c, type: 3}
+    <LevelBehaviour>k__BackingField: {fileID: 7237613149555135198, guid: 07ba9e3c08355bc469c2bfbcb537fdbe, type: 3}

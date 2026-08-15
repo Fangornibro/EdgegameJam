@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Features.GameContextsModule.Scripts;
 using UnityEngine;
 using UnityEngine.UI;
-using Object = UnityEngine.Object;
 
 namespace Features.MainMenuModule.Scripts.Views {
     public class SelectLevelView : MonoBehaviour {
         [SerializeField] private Button _backButton;
-        [SerializeField] private LevelsSequenceConfiguration _levelsSequenceConfiguration;
         [SerializeField] private Transform _levelsContainer;
         [SerializeField] private LevelView _levelViewPrefab;
         private readonly List<LevelView> _levelViews = new();
 
-        private void Awake() {
-            foreach (LevelConfiguration levelConfiguration in _levelsSequenceConfiguration.LevelsSequence) {
+        private void Start() {
+            foreach (LevelConfiguration levelConfiguration in ServiceLocator.Get<LevelsSequenceConfiguration>().LevelsSequence) {
                 LevelView levelView = Instantiate(_levelViewPrefab, _levelsContainer);
                 levelView.Initialize(levelConfiguration);
                 _levelViews.Add(levelView);

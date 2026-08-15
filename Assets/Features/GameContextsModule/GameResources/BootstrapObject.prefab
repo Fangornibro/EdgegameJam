@@ -46,3 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Features.GameContextsModule.Scripts.MonoGlobalBootstrap
   _firstSceneName: MainMenuScene
   _mainCharacter: {fileID: 2061014884457906858, guid: b36f4b421ad5e4b4e9adce4d726cc8d0, type: 3}
+  _levelsSequenceConfiguration: {fileID: 11400000, guid: 9a3f110c61baafd4aa77b439e77b03b9, type: 2}

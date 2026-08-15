@@ -1,4 +1,5 @@
 using Features.GameContextsModule.Scripts;
+using Features.LevelDesign.Scripts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,44 +8,34 @@ namespace Features.LevelHUDModule.Scripts {
         [SerializeField] private Button _restartButton;
         [SerializeField] private Button _goToMainMenuButton;
 
-        private SceneLoader _sceneLoader;
-        private bool _isSwitchingScene;
-
-        private void Start() {
-            _sceneLoader = ServiceLocator.Get<SceneLoader>();
-        }
-
+        private ILevelSceneService _levelSceneService;
+        private CurrentLevelModel _currentLevelModel;
+        
         private void OnEnable() {
+            _levelSceneService ??= ServiceLocator.Get<ILevelSceneService>();
+            _currentLevelModel ??= ServiceLocator.Get<CurrentLevelModel>();
+            
             _restartButton.onClick.AddListener(Restart);
             _goToMainMenuButton.onClick.AddListener(GoToMainMenu);
+            _currentLevelModel.OnSceneSwitchStarted += SetButtonsNotInteractable;
+
         }
 
         private void OnDisable() {
             _restartButton.onClick.RemoveListener(Restart);
             _goToMainMenuButton.onClick.RemoveListener(GoToMainMenu);
+            _currentLevelModel.OnSceneSwitchStarted -= SetButtonsNotInteractable;
         }
 
-        private async void Restart() {
-            if (_isSwitchingScene)
-                return;
+        private async void Restart() =>
+            await _levelSceneService.RestartCurrentLevel();
 
-            _isSwitchingScene = true;
-            SetButtonsInteractable(false);
-            await _sceneLoader.SwitchToAsync(SceneNames.Level);
-        }
+        private async void GoToMainMenu() =>
+            await _levelSceneService.GoToMainMenu();
 
-        private async void GoToMainMenu() {
-            if (_isSwitchingScene)
-                return;
-
-            _isSwitchingScene = true;
-            SetButtonsInteractable(false);
-            await _sceneLoader.SwitchToAsync(SceneNames.MainMenu);
-        }
-
-        private void SetButtonsInteractable(bool isInteractable) {
-            _restartButton.interactable = isInteractable;
-            _goToMainMenuButton.interactable = isInteractable;
+        private void SetButtonsNotInteractable() {
+            _restartButton.interactable = false;
+            _goToMainMenuButton.interactable = false;
         }
     }
 }
