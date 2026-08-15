@@ -15,6 +15,7 @@ namespace Features.CharacterModule.Scripts {
         [SerializeField] private Animator _animator;
         [SerializeField] private ParticleSystem _jumpParticle;
         [SerializeField] private AudioSource _jumpAudioSource;
+        [SerializeField] private AudioSource _victoryAudioSource;
         [SerializeField] private float _inputThreshold = 0.1f;
         private static readonly int _transitionToSoul = Animator.StringToHash("TransitionToSoul");
         private static readonly int _transitionToMarimo = Animator.StringToHash("TransitionToMarimo");
@@ -69,6 +70,7 @@ namespace Features.CharacterModule.Scripts {
         }
 
         private void SetWinAnimation() {
+            _victoryAudioSource.Play();
             _animator.SetBool(_isWin, true);
         }
 

@@ -21,4 +21,4 @@ MonoBehaviour:
   - <LevelBehaviour>k__BackingField: {fileID: 7237613149555135198, guid: 3e1859663f4d8e8498f1e8cbbd1ff9bf, type: 3}
   - <LevelBehaviour>k__BackingField: {fileID: 7237613149555135198, guid: c757d264084eb7944beeb64afc43471f, type: 3}
   - <LevelBehaviour>k__BackingField: {fileID: 7237613149555135198, guid: 81a0d78685b4b8b44bd760644c41d2d4, type: 3}
-  <IsEverythingUnlocked>k__BackingField: 1
+  <IsEverythingUnlocked>k__BackingField: 0
