@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6918127808425257921}
   - component: {fileID: 1751698589090457763}
+  - component: {fileID: 9023507996792227834}
   m_Layer: 0
   m_Name: EdgeLine
   m_TagString: Untagged
@@ -142,3 +143,16 @@ LineRenderer:
   m_UseWorldSpace: 0
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &9023507996792227834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8421167516913789629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b56d75b545046d2499ca4ad12d16d56e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Features.EdgePaintingModule.Scripts.EdgeLineAspect
+  _lineRenderer: {fileID: 1751698589090457763}

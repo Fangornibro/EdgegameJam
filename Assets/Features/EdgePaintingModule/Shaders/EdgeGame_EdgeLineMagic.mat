@@ -26,11 +26,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.1
+    - _AspectInfluence: 1
+    - _AspectScale: 0.27
     - _EndFade: 0.051
     - _FillNoiseStrength: 1
+    - _LineAspect: 1
     - _NoiseContrast: 2.08
     - _NoiseFloor: 0.25
-    - _OutlineWidth: 4
+    - _OutlineWidth: 5
     - _PixelsAcross: 128
     - _PixelsAlong: 128
     m_Colors:

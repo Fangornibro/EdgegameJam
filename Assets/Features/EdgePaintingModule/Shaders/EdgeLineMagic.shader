@@ -9,19 +9,23 @@ Shader "EdgeGame/EdgeLineMagic" {
         _OutlineWidth ("Outline Width (pixels)", Range(1, 8)) = 1
 
         [Header(Noise)]
-        _NoiseScale ("Noise Scale", Vector) = (8, 2, 0, 0)
+        _NoiseScale ("Noise Scale", Vector) = (1, 2, 0, 0)
         _NoiseSpeed ("Noise Speed", Vector) = (-1.5, 0.2, 0, 0)
         _NoiseContrast ("Noise Contrast", Range(0.1, 8)) = 2
         _NoiseFloor ("Noise Floor", Range(0, 1)) = 0.25
 
         [Header(Fill Noise)]
-        _FillNoiseScale ("Fill Noise Scale", Vector) = (14, 5, 0, 0)
+        _FillNoiseScale ("Fill Noise Scale", Vector) = (2, 5, 0, 0)
         _FillNoiseSpeed ("Fill Noise Speed", Vector) = (-2.5, 0.6, 0, 0)
         _FillNoiseStrength ("Fill Noise Strength", Range(0, 1)) = 0.6
 
         [Header(Pixelation)]
-        _PixelsAlong ("Pixels Along Line", Float) = 64
         _PixelsAcross ("Pixels Across Line", Float) = 8
+        // 0 = pattern stretches over the whole line, 1 = pattern tiles with square pixels.
+        _AspectInfluence ("Aspect Influence", Range(0, 1)) = 1
+        _AspectScale ("Aspect Scale", Range(0.05, 4)) = 1
+        // Length / width of the line, written by EdgeLineAspect.
+        _LineAspect ("Line Aspect", Float) = 1
 
         [Header(Shape)]
         _AlphaCutoff ("Alpha Cutoff", Range(0, 1)) = 0.1
@@ -74,8 +78,10 @@ Shader "EdgeGame/EdgeLineMagic" {
                 float4 _FillNoiseScale;
                 float4 _FillNoiseSpeed;
                 float _FillNoiseStrength;
-                float _PixelsAlong;
                 float _PixelsAcross;
+                float _AspectInfluence;
+                float _AspectScale;
+                float _LineAspect;
                 float _AlphaCutoff;
                 float _EndFade;
             CBUFFER_END
@@ -122,13 +128,19 @@ Shader "EdgeGame/EdgeLineMagic" {
 
             float4 Fragment(Varyings input) : SV_Target {
                 // Snap to a virtual pixel grid: the noise is evaluated per pixel block.
-                float2 pixels = float2(max(_PixelsAlong, 1), max(_PixelsAcross, 1));
+                // The horizontal resolution follows the line length, so blocks stay square.
+                float aspect = lerp(1.0, max(_LineAspect, 0.0001) * _AspectScale, _AspectInfluence);
+                float across = max(_PixelsAcross, 1);
+                float2 pixels = float2(max(across * aspect, 1), across);
                 float2 uv = (floor(input.uv * pixels) + 0.5) / pixels;
+
+                // Length-proportional coordinate: the pattern tiles instead of stretching.
+                float2 tiledUv = float2(uv.x * aspect, uv.y);
 
                 // Distance from the line center across its width: 0 in the middle, 1 at the border.
                 float distanceFromCenter = abs(uv.y - 0.5) * 2.0;
 
-                float2 noiseUv = uv * _NoiseScale.xy + _Time.y * _NoiseSpeed.xy;
+                float2 noiseUv = tiledUv * _NoiseScale.xy + _Time.y * _NoiseSpeed.xy;
                 float noise = Fbm(noiseUv);
                 noise = saturate(pow(abs(noise), _NoiseContrast));
                 noise = lerp(_NoiseFloor, 1.0, noise);
@@ -148,7 +160,7 @@ Shader "EdgeGame/EdgeLineMagic" {
                     : smoothstep(0, _EndFade, uv.x) * smoothstep(0, _EndFade, 1 - uv.x);
 
                 // Second noise layer that only shimmers inside the line, the outline stays solid.
-                float2 fillNoiseUv = uv * _FillNoiseScale.xy + _Time.y * _FillNoiseSpeed.xy;
+                float2 fillNoiseUv = tiledUv * _FillNoiseScale.xy + _Time.y * _FillNoiseSpeed.xy;
                 float fillNoise = Fbm(fillNoiseUv + 17.3);
                 float fill = lerp(1.0, fillNoise, _FillNoiseStrength);
 
