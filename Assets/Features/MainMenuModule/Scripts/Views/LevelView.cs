@@ -1,19 +1,20 @@
 using System.Collections.Generic;
 using Features.GameContextsModule.Scripts;
 using Features.LevelDesign.Scripts;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Features.MainMenuModule.Scripts.Views {
     public class LevelView : MonoBehaviour {
-        [SerializeField] private Image _levelImage;
+        [SerializeField] private TMP_Text _levelName;
         [SerializeField] private Button _levelButton;
         [SerializeField] private List<ScoreView> _scoreViews;
         private LevelConfiguration _levelConfiguration;
 
-        public void Initialize(LevelConfiguration levelConfiguration, int score, bool isUnLocked) {
+        public void Initialize(LevelConfiguration levelConfiguration, int score, bool isUnLocked, int number) {
             _levelConfiguration = levelConfiguration;
-            _levelImage.sprite = _levelConfiguration.LevelIcon;
+            _levelName.SetText(number.ToString());
             for (int i = 0; i < _scoreViews.Count; i++) {
                 if (i < score) {
                     _scoreViews[i].ActiveScoreObject.SetActive(true);

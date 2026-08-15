@@ -21,7 +21,7 @@ namespace Features.MainMenuModule.Scripts.Views {
                 LevelView levelView = Instantiate(_levelViewPrefab, _levelsContainer);
                 Dictionary<LevelBehaviour, LevelCompletionData> levelCompletionDatas = ServiceLocator.Get<LevelsModel>().LevelCompletionDatas;
                 bool isUnLocked = backLevelConfiguration == null || levelCompletionDatas[backLevelConfiguration.LevelBehaviour].IsCompleted;
-                levelView.Initialize(levelConfiguration, levelCompletionDatas[levelConfiguration.LevelBehaviour].Score, isUnLocked);
+                levelView.Initialize(levelConfiguration, levelCompletionDatas[levelConfiguration.LevelBehaviour].Score, isUnLocked, index + 1);
                 _levelViews.Add(levelView);
             }
         }
