@@ -13,6 +13,7 @@ namespace Features.CharacterModule.Scripts {
         [SerializeField] private CharacterEntity _characterEntity;
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private Animator _animator;
+        [SerializeField] private ParticleSystem _jumpParticle;
         [SerializeField] private float _inputThreshold = 0.1f;
         private static readonly int _transitionToSoul = Animator.StringToHash("TransitionToSoul");
         private static readonly int _transitionToMarimo = Animator.StringToHash("TransitionToMarimo");
@@ -58,6 +59,7 @@ namespace Features.CharacterModule.Scripts {
 
         private void OnJumped() {
             _animator.SetTrigger(_jumpHash);
+            _jumpParticle.Play();
         }
 
         private void SetDeathAnimation() {

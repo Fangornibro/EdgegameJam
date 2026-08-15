@@ -12,7 +12,8 @@ namespace Features.MainMenuModule.Scripts.Views {
         private readonly List<LevelView> _levelViews = new();
 
         private void Start() {
-            List<LevelConfiguration> list = ServiceLocator.Get<LevelsSequenceConfiguration>().LevelsSequence;
+            LevelsSequenceConfiguration levelsSequenceConfiguration = ServiceLocator.Get<LevelsSequenceConfiguration>();
+            List<LevelConfiguration> list = levelsSequenceConfiguration.LevelsSequence;
             for (int index = 0; index < list.Count; index++) {
                 LevelConfiguration levelConfiguration = list[index];
                 LevelConfiguration backLevelConfiguration = null;
@@ -20,7 +21,9 @@ namespace Features.MainMenuModule.Scripts.Views {
                     backLevelConfiguration = list[index - 1];
                 LevelView levelView = Instantiate(_levelViewPrefab, _levelsContainer);
                 Dictionary<LevelBehaviour, LevelCompletionData> levelCompletionDatas = ServiceLocator.Get<LevelsModel>().LevelCompletionDatas;
-                bool isUnLocked = backLevelConfiguration == null || levelCompletionDatas[backLevelConfiguration.LevelBehaviour].IsCompleted;
+                bool isUnLocked = levelsSequenceConfiguration.IsEverythingUnlocked
+                                  || backLevelConfiguration == null
+                                  || levelCompletionDatas[backLevelConfiguration.LevelBehaviour].IsCompleted;
                 levelView.Initialize(levelConfiguration, levelCompletionDatas[levelConfiguration.LevelBehaviour].Score, isUnLocked, index + 1);
                 _levelViews.Add(levelView);
             }
