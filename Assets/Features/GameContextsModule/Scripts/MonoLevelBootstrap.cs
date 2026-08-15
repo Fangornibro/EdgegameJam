@@ -1,3 +1,4 @@
+using Features.EdgePaintingModule.Scripts;
 using Features.LevelDesign.Scripts;
 using UnityEngine;
 
@@ -6,6 +7,10 @@ namespace Features.GameContextsModule.Scripts {
         [SerializeField] private Transform _levelContainer;
 
         private void Awake() {
+            EdgesModel edgesModel = new();
+            ServiceLocator.Register(edgesModel);
+            ServiceLocator.Register<IEdgesService>(new EdgesService(edgesModel));
+
             CurrentLevelModel currentLevelModel = ServiceLocator.Get<CurrentLevelModel>();
 
             if (currentLevelModel.LevelPrefab == null) {
@@ -18,7 +23,10 @@ namespace Features.GameContextsModule.Scripts {
 
         private void OnDestroy() {
             if (ServiceLocator.TryGet(out CurrentLevelModel currentLevelModel))
-                currentLevelModel.Clear();
+                currentLevelModel.ClearLevelInstance();
+
+            ServiceLocator.Unregister<IEdgesService>();
+            ServiceLocator.Unregister<EdgesModel>();
         }
     }
 }

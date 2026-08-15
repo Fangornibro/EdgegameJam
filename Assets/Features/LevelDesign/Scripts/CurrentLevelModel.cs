@@ -3,8 +3,7 @@ namespace Features.LevelDesign.Scripts {
         public LevelBehaviour LevelPrefab { get; set; }
         public LevelBehaviour LevelInstance { get; set; }
 
-        public void Clear() {
-            LevelPrefab = null;
+        public void ClearLevelInstance() {
             LevelInstance = null;
         }
     }

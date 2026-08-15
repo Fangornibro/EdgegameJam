@@ -8,6 +8,7 @@ namespace Features.LevelDesign.Scripts {
     public class LevelBehaviour : MonoBehaviour {
         [SerializeField] private Transform _spawnRoot;
         [SerializeField] private Tilemap _spawnPoint;
+        [field: SerializeField, Min(1)] public int MaxEdgeCount { get; private set; }
 
         private void Awake() {
             ServiceLocator.Get<ICharacterFactory>().CreateCharacter(_spawnRoot, GetSpawnPosition());

@@ -1,8 +1,14 @@
+using System;
+using System.Collections.Generic;
+using Features.EdgePaintingModule.Scripts;
+using Features.GameContextsModule.Scripts;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Features.CharacterModule.Scripts {
     public class CharacterMovable : MonoBehaviour {
+        [SerializeField] private Rigidbody2D _rigidbody;
+        
         [Header("Input")]
         [SerializeField] private InputActionReference _moveAction;
         [SerializeField] private InputActionReference _jumpAction;
@@ -11,7 +17,6 @@ namespace Features.CharacterModule.Scripts {
         [SerializeField] private float _moveSpeed = 8f;
         [SerializeField] private float _acceleration = 90f;
         [SerializeField] private float _deceleration = 120f;
-        [SerializeField] private bool _flipSpriteByDirection = true;
 
         [Header("Jump")]
         [SerializeField] private float _jumpHeight = 3f;
@@ -26,24 +31,30 @@ namespace Features.CharacterModule.Scripts {
         [SerializeField] private Vector2 _groundCheckSize = new(0.45f, 0.1f);
         [SerializeField] private LayerMask _groundLayers;
 
-        private Rigidbody2D _rigidbody;
-        private SpriteRenderer _spriteRenderer;
         private float _defaultGravityScale;
         private float _horizontalInput;
         private float _coyoteTimeLeft;
         private float _jumpBufferLeft;
+        private IEdgesService _edgesService;
+        private bool _isJumpBlocked;
+        private float _gravitySign = 1f;
+
+        public event Action Jumped;
 
         public bool IsGrounded { get; private set; }
+        public float HorizontalInput => _horizontalInput;
         public Vector2 Velocity => _rigidbody.linearVelocity;
 
         private void Awake() {
-            _rigidbody = GetComponent<Rigidbody2D>();
-            _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             _defaultGravityScale = _rigidbody.gravityScale;
             _rigidbody.freezeRotation = true;
 
             if (_groundCheckOrigin == null)
                 _groundCheckOrigin = transform;
+        }
+
+        private void Start() {
+            _edgesService = ServiceLocator.Get<IEdgesService>();
         }
 
         private void OnEnable() {
@@ -69,8 +80,11 @@ namespace Features.CharacterModule.Scripts {
             if (_jumpBufferLeft > 0f)
                 _jumpBufferLeft -= Time.deltaTime;
 
-            if (_flipSpriteByDirection && _spriteRenderer != null && !Mathf.Approximately(_horizontalInput, 0f))
-                _spriteRenderer.flipX = _horizontalInput < 0f;
+            List<EdgeSide> sideOfLastEdge = _edgesService.GetSideOfEdges(transform.position);
+            bool isGravityInverted = sideOfLastEdge.Count > 0 && !sideOfLastEdge.Contains(EdgeSide.Left);
+
+            _isJumpBlocked = isGravityInverted;
+            _gravitySign = isGravityInverted ? -1f : 1f;
         }
 
         private void FixedUpdate() {
@@ -94,22 +108,27 @@ namespace Features.CharacterModule.Scripts {
         }
 
         private void TryConsumeBufferedJump() {
-            if (_jumpBufferLeft <= 0f || _coyoteTimeLeft <= 0f)
+            if (_jumpBufferLeft <= 0f || _coyoteTimeLeft <= 0f || _isJumpBlocked)
                 return;
 
             _jumpBufferLeft = 0f;
             _coyoteTimeLeft = 0f;
 
             float jumpSpeed = Mathf.Sqrt(2f * Mathf.Abs(Physics2D.gravity.y) * _defaultGravityScale * _jumpHeight);
-            _rigidbody.linearVelocity = new Vector2(_rigidbody.linearVelocity.x, jumpSpeed);
+            _rigidbody.linearVelocity = new Vector2(_rigidbody.linearVelocity.x, jumpSpeed * _gravitySign);
+            IsGrounded = false;
+            Jumped?.Invoke();
         }
 
         private void ApplyBetterGravity() {
-            bool isFalling = _rigidbody.linearVelocity.y < 0f;
-            _rigidbody.gravityScale = isFalling ? _defaultGravityScale * _fallGravityMultiplier : _defaultGravityScale;
+            float verticalSpeed = _rigidbody.linearVelocity.y;
+            bool isFalling = verticalSpeed * _gravitySign < 0f;
+            float gravityScale = isFalling ? _defaultGravityScale * _fallGravityMultiplier : _defaultGravityScale;
 
-            if (_rigidbody.linearVelocity.y < -_maxFallSpeed)
-                _rigidbody.linearVelocity = new Vector2(_rigidbody.linearVelocity.x, -_maxFallSpeed);
+            _rigidbody.gravityScale = gravityScale * _gravitySign;
+
+            if (verticalSpeed * _gravitySign < -_maxFallSpeed)
+                _rigidbody.linearVelocity = new Vector2(_rigidbody.linearVelocity.x, -_maxFallSpeed * _gravitySign);
         }
 
         private void OnJumpPerformed(InputAction.CallbackContext context) {
@@ -117,7 +136,7 @@ namespace Features.CharacterModule.Scripts {
         }
 
         private void OnJumpCanceled(InputAction.CallbackContext context) {
-            if (_rigidbody.linearVelocity.y > 0f)
+            if (_rigidbody.linearVelocity.y * _gravitySign > 0f)
                 _rigidbody.linearVelocity = new Vector2(_rigidbody.linearVelocity.x, _rigidbody.linearVelocity.y * _jumpCutMultiplier);
         }
 

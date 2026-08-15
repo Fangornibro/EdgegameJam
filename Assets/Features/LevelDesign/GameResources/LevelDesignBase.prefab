@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2578503612380339831}
   - component: {fileID: -8214101651736619331}
   m_Layer: 0
-  m_Name: LeveDesignBase
+  m_Name: LevelDesignBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,6 +64,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Features.LevelDesign.Scripts.LevelBehaviour
   _spawnRoot: {fileID: 2443294970334087266}
   _spawnPoint: {fileID: 4397564170860746569}
+  <MaxEdgeCount>k__BackingField: 2
 --- !u!1 &3482548180958734672
 GameObject:
   m_ObjectHideFlags: 0

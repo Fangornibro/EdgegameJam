@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1183056854586310802}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.499, z: 0}
+  m_LocalPosition: {x: 0.035, y: -0.397, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -45,6 +45,8 @@ GameObject:
   - component: {fileID: 6063376440079079098}
   - component: {fileID: 1931266395911658310}
   - component: {fileID: 2787044089471853476}
+  - component: {fileID: 9121005788861202179}
+  - component: {fileID: 6510820124075949324}
   m_Layer: 3
   m_Name: CharacterEntity
   m_TagString: Untagged
@@ -117,7 +119,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: f8d5433348633994f88a5530747f6d15, type: 3}
+  m_Sprite: {fileID: -1514661297320761350, guid: 0a2c02f146bae3c4c9308c6463978fde, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -178,12 +180,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 189a5cfb2fdb1134a846b21a34000b85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Features.CharacterModule.Scripts.CharacterMovable
+  _rigidbody: {fileID: 6063376440079079098}
   _moveAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   _jumpAction: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   _moveSpeed: 4
   _acceleration: 90
   _deceleration: 120
-  _flipSpriteByDirection: 1
   _jumpHeight: 3
   _coyoteTime: 0.1
   _jumpBufferTime: 0.1
@@ -229,6 +231,44 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.09}
-  m_Size: {x: 0.66, y: 0.82}
+  m_Offset: {x: 0.015237749, y: -0.011959076}
+  m_Size: {x: 0.71079266, y: 0.793947}
   m_Direction: 0
+--- !u!95 &9121005788861202179
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1486979731528869353}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 41041c0ab39bc1440a6cebb714e18ab9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6510820124075949324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1486979731528869353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5b0ec6469aa3dd49b3b03b470df8d41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Features.CharacterModule.Scripts.CharacterAnimator
+  _characterMovable: {fileID: 1931266395911658310}
+  _spriteRenderer: {fileID: 5416493575185639545}
+  _animator: {fileID: 9121005788861202179}
+  _inputThreshold: 0.1

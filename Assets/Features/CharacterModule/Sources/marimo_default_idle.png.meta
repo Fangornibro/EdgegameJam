@@ -1,10 +1,22 @@
 fileFormatVersion: 2
-guid: f8d5433348633994f88a5530747f6d15
+guid: 0a2c02f146bae3c4c9308c6463978fde
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3362345163205867443
-    second: marimo_default_0
+      213: -1514661297320761350
+    second: marimo_default_idle_0
+  - first:
+      213: 6786964219448809399
+    second: marimo_default_idle_1
+  - first:
+      213: -5003141573144099199
+    second: marimo_default_idle_2
+  - first:
+      213: 4434128023829651162
+    second: marimo_default_idle_3
+  - first:
+      213: 6773811605242895565
+    second: marimo_default_idle_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +58,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -100,7 +112,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: marimo_default_0
+      name: marimo_default_idle_0
       rect:
         serializedVersion: 2
         x: 2
@@ -108,15 +120,103 @@ TextureImporter:
         width: 27
         height: 26
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d488cd673ec8651d0800000000000000
-      internalID: -3362345163205867443
+      spriteID: af7e92a3397dafae0800000000000000
+      internalID: -1514661297320761350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marimo_default_idle_1
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 0
+        width: 27
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b7588baff3203e50800000000000000
+      internalID: 6786964219448809399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marimo_default_idle_2
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 0
+        width: 27
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 186c1cb3f35419ab0800000000000000
+      internalID: -5003141573144099199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marimo_default_idle_3
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 0
+        width: 27
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ade98f4d1ff298d30800000000000000
+      internalID: 4434128023829651162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marimo_default_idle_4
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 0
+        width: 27
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dccdbe904c9610e50800000000000000
+      internalID: 6773811605242895565
       vertices: []
       indices: 
       edges: []
@@ -125,7 +225,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 3db0ac97ee3af094ca180d50fe4b5d46
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +235,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      marimo_default_0: -3362345163205867443
+      marimo_default_idle_0: -1514661297320761350
+      marimo_default_idle_1: 6786964219448809399
+      marimo_default_idle_2: -5003141573144099199
+      marimo_default_idle_3: 4434128023829651162
+      marimo_default_idle_4: 6773811605242895565
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
