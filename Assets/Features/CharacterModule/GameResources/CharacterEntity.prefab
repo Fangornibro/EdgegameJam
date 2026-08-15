@@ -141,6 +141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29246b4c43c2474d9a8f6bd4d9a9eee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Features.CharacterModule.Scripts.CharacterEntity
+  <DeathTime>k__BackingField: 1
+  <WinTime>k__BackingField: 2
 --- !u!50 &6063376440079079098
 Rigidbody2D:
   serializedVersion: 5
@@ -181,6 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Features.CharacterModule.Scripts.CharacterMovable
   _rigidbody: {fileID: 6063376440079079098}
+  _characterEntity: {fileID: 2061014884457906858}
   _moveAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   _jumpAction: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   _moveSpeed: 4
@@ -269,6 +272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Features.CharacterModule.Scripts.CharacterAnimator
   _characterMovable: {fileID: 1931266395911658310}
+  _characterEntity: {fileID: 2061014884457906858}
   _spriteRenderer: {fileID: 5416493575185639545}
   _animator: {fileID: 9121005788861202179}
   _inputThreshold: 0.1

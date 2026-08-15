@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 namespace Features.CharacterModule.Scripts {
     public class CharacterMovable : MonoBehaviour {
         [SerializeField] private Rigidbody2D _rigidbody;
+        [SerializeField] private CharacterEntity _characterEntity;
         
         [Header("Input")]
         [SerializeField] private InputActionReference _moveAction;
@@ -75,6 +76,9 @@ namespace Features.CharacterModule.Scripts {
         }
 
         private void Update() {
+            if (_characterEntity.IsDead || _characterEntity.IsWin)
+                return;
+            
             _horizontalInput = _moveAction.action.ReadValue<Vector2>().x;
 
             if (_jumpBufferLeft > 0f)
@@ -88,6 +92,11 @@ namespace Features.CharacterModule.Scripts {
         }
 
         private void FixedUpdate() {
+            if (_characterEntity.IsDead || _characterEntity.IsWin) {
+                _rigidbody.bodyType = RigidbodyType2D.Static;
+                return;
+            }
+            
             UpdateGroundState();
             ApplyHorizontalMovement();
             TryConsumeBufferedJump();
@@ -132,10 +141,16 @@ namespace Features.CharacterModule.Scripts {
         }
 
         private void OnJumpPerformed(InputAction.CallbackContext context) {
+            if(_characterEntity.IsDead || _characterEntity.IsWin)
+                return;
+            
             _jumpBufferLeft = _jumpBufferTime;
         }
 
         private void OnJumpCanceled(InputAction.CallbackContext context) {
+            if(_characterEntity.IsDead || _characterEntity.IsWin)
+                return;
+            
             if (_rigidbody.linearVelocity.y * _gravitySign > 0f)
                 _rigidbody.linearVelocity = new Vector2(_rigidbody.linearVelocity.x, _rigidbody.linearVelocity.y * _jumpCutMultiplier);
         }

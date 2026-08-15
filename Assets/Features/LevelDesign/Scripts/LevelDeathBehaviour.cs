@@ -1,4 +1,6 @@
-﻿using Features.GameContextsModule.Scripts;
+﻿using System.Collections;
+using Features.CharacterModule.Scripts;
+using Features.GameContextsModule.Scripts;
 using UnityEngine;
 
 namespace Features.LevelDesign.Scripts {
@@ -6,6 +8,7 @@ namespace Features.LevelDesign.Scripts {
         [SerializeField] private CollisionTriggerReactor _levelDeathCollisionTriggerReactor;
         
         private ILevelSceneService _levelSceneService;
+        private Coroutine _delayResetCoroutine;
 
         private void Start() {
             _levelSceneService = ServiceLocator.Get<ILevelSceneService>();
@@ -17,9 +20,25 @@ namespace Features.LevelDesign.Scripts {
 
         private void OnDisable() {
             _levelDeathCollisionTriggerReactor.OnTriggerEnterEvent -= Death;
+            if(_delayResetCoroutine != null) 
+                StopCoroutine(_delayResetCoroutine);
         }
 
-        private void Death(Collider2D other) =>
+        private void Death(Collider2D other) {
+            if (!other.TryGetComponent(out IKillable killable))
+                return;
+
+            if(killable.IsDead)
+                return;
+                
+            killable.Kill();
+            _delayResetCoroutine = StartCoroutine(DelayedRestartLevel(killable.DeathTime));
+        }
+
+        private IEnumerator DelayedRestartLevel(float delay) {
+            yield return new WaitForSeconds(delay);
+            
             _levelSceneService.RestartCurrentLevel();
+        }
     }
 }

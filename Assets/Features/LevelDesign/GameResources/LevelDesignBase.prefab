@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1797520215968320406}
   - component: {fileID: 2868154176173311352}
   - component: {fileID: 7475836208294009526}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Death
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1990,7 +1990,7 @@ GameObject:
   - component: {fileID: 2065406615307310665}
   - component: {fileID: 4142649093232833405}
   - component: {fileID: 5529812603069895827}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
