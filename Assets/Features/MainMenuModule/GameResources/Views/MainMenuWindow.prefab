@@ -194,6 +194,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: MainMenuView
       objectReference: {fileID: 0}
+    - target: {fileID: 3998362253616679344, guid: c8ae3f4f7ff574949a8d0c5d553cc161, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3998362253616679344, guid: c8ae3f4f7ff574949a8d0c5d553cc161, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3998362253616679344, guid: c8ae3f4f7ff574949a8d0c5d553cc161, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5495254835771629607, guid: c8ae3f4f7ff574949a8d0c5d553cc161, type: 3}
       propertyPath: _window
       value: 
