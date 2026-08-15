@@ -9,6 +9,8 @@ namespace Features.GameContextsModule.Scripts {
         [SerializeField] private CharacterEntity _mainCharacter;
         [SerializeField] private LevelsSequenceConfiguration _levelsSequenceConfiguration;
         [SerializeField] private ScoreEntity _scoreEntityPrefab;
+        [SerializeField] private AudioSource _uiAudioSource;
+        [SerializeField] private AudioClip _clickClip;
 
         private void Awake() {
             LevelsModel levelsModel = new();
@@ -20,6 +22,7 @@ namespace Features.GameContextsModule.Scripts {
             ServiceLocator.Register(_levelsSequenceConfiguration);
             ServiceLocator.Register<ICharacterFactory>(new CharacterFactory(_mainCharacter, characterModel));
             ServiceLocator.Register<IScoreEntityFactory>(new ScoreEntityFactory(_scoreEntityPrefab, levelsModel));
+            ServiceLocator.Register<IUISoundService>(new UISoundService(_uiAudioSource, _clickClip));
             ServiceLocator.Register<ILevelSceneService>(new LevelSceneService(sceneLoader, levelsModel, _levelsSequenceConfiguration));
             levelsModel.SetupLevelCompletionDatas(_levelsSequenceConfiguration);
         }

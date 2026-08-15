@@ -11,6 +11,8 @@ namespace Features.MainMenuModule.Scripts.Views {
         [SerializeField] private LevelView _levelViewPrefab;
         private readonly List<LevelView> _levelViews = new();
 
+        private IUISoundService _uiSoundService;
+
         private void Start() {
             LevelsSequenceConfiguration levelsSequenceConfiguration = ServiceLocator.Get<LevelsSequenceConfiguration>();
             List<LevelConfiguration> list = levelsSequenceConfiguration.LevelsSequence;
@@ -37,6 +39,7 @@ namespace Features.MainMenuModule.Scripts.Views {
         }
 
         private void OnEnable() {
+            _uiSoundService ??= ServiceLocator.Get<IUISoundService>();
             _backButton.onClick.AddListener(CloseView);
         }
 
@@ -44,7 +47,9 @@ namespace Features.MainMenuModule.Scripts.Views {
             _backButton.onClick.RemoveListener(CloseView);
         }
 
-        private void CloseView() =>
+        private void CloseView() {
+            _uiSoundService.PlayClick();
             Destroy(gameObject);
+        }
     }
 }

@@ -35,6 +35,7 @@ namespace Features.MainMenuModule.Scripts.Views {
         }
 
         private async void StartLevel() {
+            ServiceLocator.Get<IUISoundService>().PlayClick();
             _levelButton.interactable = false;
             ServiceLocator.Get<LevelsModel>().CurrentLevelPrefab = _levelConfiguration.LevelBehaviour;
             await ServiceLocator.Get<SceneLoader>().SwitchToAsync(SceneNames.Level);
