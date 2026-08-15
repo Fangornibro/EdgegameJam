@@ -37,10 +37,11 @@ namespace Features.CharacterModule.Scripts {
         private float _coyoteTimeLeft;
         private float _jumpBufferLeft;
         private IEdgesService _edgesService;
-        private bool _isJumpBlocked;
+        private bool _isGravityInverted;
         private float _gravitySign = 1f;
 
         public event Action Jumped;
+        public event Action<bool> OnGravityInvertedChanged;
 
         public bool IsGrounded { get; private set; }
         public float HorizontalInput => _horizontalInput;
@@ -87,10 +88,14 @@ namespace Features.CharacterModule.Scripts {
             List<EdgeSide> sideOfLastEdge = _edgesService.GetSideOfEdges(transform.position);
             bool isGravityInverted = sideOfLastEdge.Count > 0 && !sideOfLastEdge.Contains(EdgeSide.Left);
 
-            _isJumpBlocked = isGravityInverted;
+            if (_isGravityInverted != isGravityInverted) {
+                _isGravityInverted = isGravityInverted;
+                OnGravityInvertedChanged?.Invoke(_isGravityInverted);
+            }
+            
             _gravitySign = isGravityInverted ? -1f : 1f;
         }
-
+        
         private void FixedUpdate() {
             if (_characterEntity.IsDead || _characterEntity.IsWin) {
                 _rigidbody.bodyType = RigidbodyType2D.Static;
@@ -117,7 +122,7 @@ namespace Features.CharacterModule.Scripts {
         }
 
         private void TryConsumeBufferedJump() {
-            if (_jumpBufferLeft <= 0f || _coyoteTimeLeft <= 0f || _isJumpBlocked)
+            if (_jumpBufferLeft <= 0f || _coyoteTimeLeft <= 0f || _isGravityInverted)
                 return;
 
             _jumpBufferLeft = 0f;

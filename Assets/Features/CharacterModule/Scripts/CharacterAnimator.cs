@@ -14,16 +14,21 @@ namespace Features.CharacterModule.Scripts {
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private Animator _animator;
         [SerializeField] private float _inputThreshold = 0.1f;
+        private static readonly int _transitionToSoul = Animator.StringToHash("TransitionToSoul");
+        private static readonly int _transitionToMarimo = Animator.StringToHash("TransitionToMarimo");
+        private static readonly int _isSoul = Animator.StringToHash("IsSoul");
 
         private void OnEnable() {
             _characterMovable.Jumped += OnJumped;
+            _characterMovable.OnGravityInvertedChanged += OnGravityInvertedChanged;
             _characterEntity.OnKilled += SetDeathAnimation;
             _characterEntity.OnWin += SetWinAnimation;
         }
 
         private void OnDisable() {
             _characterMovable.Jumped -= OnJumped;
-            _characterEntity.OnKilled += SetDeathAnimation;
+            _characterMovable.OnGravityInvertedChanged -= OnGravityInvertedChanged;
+            _characterEntity.OnKilled -= SetDeathAnimation;
             _characterEntity.OnWin -= SetWinAnimation;
         }
 
@@ -58,9 +63,17 @@ namespace Features.CharacterModule.Scripts {
         private void SetDeathAnimation() {
             _animator.SetBool(_isDead, true);
         }
-        
+
         private void SetWinAnimation() {
             _animator.SetBool(_isWin, true);
+        }
+
+        private void OnGravityInvertedChanged(bool isInverted) {
+            _animator.SetTrigger(isInverted
+                ? _transitionToSoul
+                : _transitionToMarimo);
+
+            _animator.SetBool(_isSoul, isInverted);
         }
     }
 }
